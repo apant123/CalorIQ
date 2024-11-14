@@ -4,6 +4,7 @@ import { auth } from '../firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 const SignUpPage = () => {
+    const navigation = useNavigation();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -13,6 +14,8 @@ const SignUpPage = () => {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
             console.log('User registered:', user);
+            navigation.navigate('Experience');
+
             // Add navigation to home screen or other logic here
         } catch (error) {
             console.error('Registration error:', error);
