@@ -12,6 +12,7 @@ import DiningHallScreen from './pages/dininghall';
 import FoodScreen from './pages/food';
 import ProfileScreen from './pages/profile';
 import CameraScreen from './pages/camera';
+import LoginPage from './pages/login';
 
 const Stack = createStackNavigator();
 
@@ -29,6 +30,7 @@ export default function App() {
       >
         <Stack.Screen name="Welcome" component={WelcomeScreen} />
         <Stack.Screen name="Signup" component={SignUpPage} />
+        <Stack.Screen name="Login" component={LoginPage} />
         <Stack.Screen name="Home" component={DashboardScreen} />
         <Stack.Screen name="Experience" component={ExperienceScreen} />
         <Stack.Screen name="Goals" component={EatingGoalsScreen} />

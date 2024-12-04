@@ -1,15 +1,19 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { FontAwesome5, MaterialIcons, Entypo } from '@expo/vector-icons';
+import { Image } from 'react-native-elements';
 
 export default function FoodLogScreen() {
   return (
     <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <View style={styles.headerBox}>
-          <Text style={styles.header}>FOOD LOG</Text>
-        </View>
+      <View style={styles.header}>
+        <Image source={require('../assets/logo.png')} style={{ width: 135, height: 27 }} />
+        <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+          <FontAwesome5 name="user-circle" size={27} color="#3F71A8" />
+        </TouchableOpacity>
       </View>
+      
+      <Text style={styles.greeting}>FOOD LOG</Text>
       
       <View style={styles.daySelector}>
         {['M', 'T', 'W', 'Th', 'F', 'Sa', 'Su'].map((day, index) => (
@@ -55,25 +59,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%'
   },
-  headerContainer: {
-    width: '100%',
-    backgroundColor: '#D3D3D3',
-    paddingTop: 40,
-    paddingBottom: 10,
-    alignItems: 'center',
-  },
-  headerBox: {
-    width: '70%',
-    backgroundColor: 'white',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 10,
-    marginTop: '10%',
-    marginBottom: '5%',
-  },
   header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: '15%',
+    width: '100%', // Ensure it spans the entire width
+    paddingHorizontal: 20, // Add padding to prevent content from touching screen edges
+  },
+  greeting: {
     fontSize: 30,
-    alignSelf: 'center',
+    marginTop: '10%',
+    fontWeight: "bold"
   },
   daySelector: {
     flexDirection: 'row',
@@ -84,18 +81,18 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#e0e0e0',
+    backgroundColor: '#C5D4E5',
     justifyContent: 'center',
     alignItems: 'center',
   },
   selectedDay: {
-    backgroundColor: '#9e9e9e',
+    backgroundColor: '#F8D446',
   },
   dayText: {
-    color: '#606060',
+    color: '#000000',
   },
   selectedDayText: {
-    color: 'white',
+    color: 'black',
     fontWeight: 'bold',
   },
   intakeText: {
@@ -103,6 +100,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     marginTop: '6%',
     marginHorizontal: '5%',
+    fontWeight: "bold"
   },
   caloriesText: {
     fontSize: 28,
@@ -118,7 +116,7 @@ const styles = StyleSheet.create({
   },
   mealCard: {
     width: '100%',
-    backgroundColor: '#d3d3d3',
+    backgroundColor: '#C5D4E5',
     borderRadius: 10,
     padding: 15,
     marginVertical: 10,
@@ -145,9 +143,9 @@ const styles = StyleSheet.create({
   },
   emptyCard: {
     width: '100%',
-    backgroundColor: '#d3d3d3',
+    backgroundColor: '#C5D4E5',
     borderRadius: 10,
-    height: 100,
+    height: 150,
     marginVertical: 10,
   },
   footer: {
@@ -168,7 +166,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#D3D3D3',
     paddingVertical: 10,
     borderRadius: 10,
-    marginTop: '40%',
+    marginTop: '20%',
     width: '90%'
   },
 });

@@ -7,7 +7,7 @@ export default function WelcomeScreen({ navigation }) {
       <Text style={styles.title}>Welcome to Caloriq</Text>
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate('Experience')} // Navigate to the Home screen
+        onPress={() => navigation.navigate('Signup')} // Navigate to the Home screen
       >
         <Text style={styles.buttonText}>Get started</Text>
       </TouchableOpacity>

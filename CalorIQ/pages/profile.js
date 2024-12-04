@@ -1,12 +1,47 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
+import { doc, getDoc } from "firebase/firestore";
+import { auth, db } from "../firebase";
 
 const ProfileScreen = () => {
   const navigation = useNavigation();
   const [selectedTab, setSelectedTab] = useState('feed'); // State to manage the selected tab
+
+  const [displayName, setDisplayName] = useState("Guest");
+
+  const fetchDisplayName = async () => {
+    const user = auth.currentUser; // Get the signed-in user
+    if (user) {
+        const userDocRef = doc(db, "users", user.uid); // Reference Firestore document
+        try {
+            const userDoc = await getDoc(userDocRef);
+            if (userDoc.exists()) {
+                const displayName = userDoc.data().displayName;
+                console.log("Display Name:", displayName);
+                return displayName; // Use this value to render in the UI
+            } else {
+                console.log("No such document in Firestore.");
+                return "Guest"; // Fallback if no display name is set
+            }
+        } catch (error) {
+            console.error("Error fetching display name:", error.message);
+        }
+    } else {
+        console.error("No user is signed in.");
+        return "Guest";
+    }
+  };
+
+  useEffect(() => {
+    const getDisplayName = async () => {
+        const name = await fetchDisplayName();
+        setDisplayName(name);
+    };
+    getDisplayName();
+  }, []);
 
   const posts = [
     { id: '1', user: 'Sam', action: 'ate a burrito bowl at', location: 'Rende West' },
@@ -95,7 +130,7 @@ const ProfileScreen = () => {
             </View>
           </View>
         </View>
-        <Text style={styles.name}>John Lu</Text>
+        <Text style={styles.name}>{displayName}</Text>
         <View style={styles.icons}>
           <TouchableOpacity>
             <Icon name="share-social-outline" size={24} color="black" />

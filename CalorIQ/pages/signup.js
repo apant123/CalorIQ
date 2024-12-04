@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
-import { auth } from '../firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { useNavigation } from '@react-navigation/native';
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { auth, db } from "../firebase";
 
 const SignUpPage = () => {
     const navigation = useNavigation();
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -13,23 +16,37 @@ const SignUpPage = () => {
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
-            console.log('User registered:', user);
-            navigation.navigate('Experience');
-
-            // Add navigation to home screen or other logic here
+        
+            // Create a document in Firestore for the new user
+            const userDocRef = doc(db, "users", user.uid);
+            await setDoc(userDocRef, {
+              displayName: name,  // Set the display name when signing up
+              email: user.email
+            });
+        
+            console.log("User signed up and Firestore document created!");
+            navigation.navigate("Experience")
         } catch (error) {
-            console.error('Registration error:', error);
+            console.error("Error signing up:", error.message);
         }
     };
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Create An Account</Text>
-            
-            <Text style={styles.label}>Email or Phone Number:</Text>
+            <Text style={styles.title}>Create an account</Text>
+
+            <Text style={styles.label}>Name:</Text>
             <TextInput 
                 style={styles.input} 
-                keyboardType="text"
+                keyboardType="default"
+                value={name}
+                onChangeText={setName}
+            />
+            
+            <Text style={styles.label}>Email:</Text>
+            <TextInput 
+                style={styles.input} 
+                keyboardType="default"
                 value={email}
                 onChangeText={setEmail}
             />
@@ -42,9 +59,14 @@ const SignUpPage = () => {
                 onChangeText={setPassword}
             />
 
-            <TouchableOpacity style={styles.signUpButton} onPress={signup}>
-                <Text style={styles.signUpButtonText}>Sign Up</Text>
-            </TouchableOpacity>
+            <View style={styles.footer}>
+                <TouchableOpacity style={styles.signUpButton} onPress={signup}>
+                    <Text style={styles.signUpButtonText}>Sign Up</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+                    <Text style={styles.signUpRedirectText}>Already have an account? Sign In</Text>
+                </TouchableOpacity>
+            </View>
         </View>
     );
 };
@@ -52,7 +74,7 @@ const SignUpPage = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#D3D3D3', // light gray background
+        backgroundColor: '#FFFFFF', // light gray background
         padding: 20,
         justifyContent: 'center',
     },
@@ -67,7 +89,7 @@ const styles = StyleSheet.create({
         marginBottom: 5,
     },
     input: {
-        backgroundColor: '#F5F5F5',
+        backgroundColor: '#FDEDB7',
         borderRadius: 10,
         paddingVertical: 10,
         paddingHorizontal: 15,
@@ -86,21 +108,27 @@ const styles = StyleSheet.create({
         color: '#FFFFFF',
         fontWeight: 'bold',
     },
+    footer: {
+        alignItems: 'center', // Center button and link horizontally
+        paddingBottom: 20, // Add padding at the bottom
+    },
     signUpButton: {
-        backgroundColor: '#A9A9A9',
+        backgroundColor: '#3F71A8',
         paddingVertical: 15,
+        paddingHorizontal: 50,
         borderRadius: 10,
         alignItems: 'center',
+        marginTop: 20,
     },
     signUpButtonText: {
-        color: '#000000',
+        color: '#FFFFFF',
         fontSize: 18,
         fontWeight: 'bold',
     },
-    errorText: {
-        color: 'red',
-        marginBottom: 10,
-        textAlign: 'center',
+    signUpRedirectText: {
+        color: '#000000',
+        fontSize: 14,
+        marginTop: 15,
     },
 });
 

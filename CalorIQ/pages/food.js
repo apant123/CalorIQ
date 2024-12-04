@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native';
 import { Icon, Rating } from 'react-native-elements';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -7,10 +7,14 @@ const FoodScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const { imageUri } = route.params;
+  const [activeTab, setActiveTab] = useState('portion');
+
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity 
           style={styles.backButton} 
@@ -23,47 +27,58 @@ const FoodScreen = () => {
         </View>
       </View>
 
-      {/* Image Display */}
       {imageUri ? (
         <Image source={{ uri: imageUri }} style={styles.imagePlaceholder} />
       ) : (
         <View style={styles.imagePlaceholder} />
       )}
 
-      {/* Food Details */}
       <View style={styles.detailsContainer}>
         <View style={styles.titleRow}>
-          <Text style={styles.title}>Chicken Bowl</Text>
-          <Icon name="bookmark-border" type="material" color="#000" />
+          <Text style={styles.title}>Beef Bowl</Text>
+          <Icon name="bookmark-border" type="material" size={30} color="#3F71A8" />
         </View>
 
-        {/* Rating */}
         <View style={styles.ratingContainer}>
           <Rating
-            imageSize={20}
+            imageSize={30}
             readonly
-            startingValue={3.5}
+            startingValue={4}
             style={styles.rating}
           />
         </View>
 
-        {/* Tags */}
         <View style={styles.tagsContainer}>
           <Text style={styles.tag}>fried</Text>
           <Text style={styles.tag}>macros</Text>
           <Text style={styles.tag}>contains wheat</Text>
         </View>
 
-        {/* Tabs */}
         <View style={styles.tabsContainer}>
-          <Text style={[styles.tab, styles.activeTab]}>portion</Text>
-          <Text style={styles.tab}>ingredients</Text>
+          <TouchableOpacity
+            style={[styles.tab, activeTab === 'portion' ? styles.activeTab : null]}
+            onPress={() => handleTabChange('portion')}
+          >
+            <Text style={styles.tabText}>portion</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.tab, activeTab === 'ingredients' ? styles.activeTab : null]}
+            onPress={() => handleTabChange('ingredients')}
+          >
+            <Text style={styles.tabText}>ingredients</Text>
+          </TouchableOpacity>
         </View>
 
-        {/* AR Portion Control */}
         <View style={styles.arContainer}>
-          <Text style={styles.arText}>ar recommended portion control</Text>
+          <View style={styles.whiteBox}>
+            <Text style={styles.blackText}>
+              {activeTab === 'portion'
+                ? 'To stay on track, eat 3/4 of the plate'
+                : 'Beef, Rice, Spring Onions, Gravy'}
+            </Text>
+          </View>
         </View>
+
       </View>
     </ScrollView>
   );
@@ -83,19 +98,20 @@ const styles = StyleSheet.create({
   },
   backButton: {
     position: 'absolute',
+    top: 75,
     left: 16,
   },
   headerTextContainer: {
-    backgroundColor: '#d1cbc7',
     padding: 8,
     borderRadius: 10,
     width: '50%',
     marginTop: '15%',
   },
   headerTitle: {
-    fontSize: 24,
-    color: '#000',
+    fontSize: 30,
+    color: '#3F71A8',
     textAlign: 'center',
+    fontWeight: "bold"
   },
   imagePlaceholder: {
     height: '40%',
@@ -110,7 +126,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   title: {
-    fontSize: 24,
+    fontSize: 30,
+    fontWeight: "bold"
   },
   ratingContainer: {
     alignItems: 'flex-start',
@@ -124,7 +141,7 @@ const styles = StyleSheet.create({
     marginVertical: 8,
   },
   tag: {
-    backgroundColor: '#d1cbc7',
+    backgroundColor: '#FDF1C0',
     paddingVertical: 4,
     paddingHorizontal: 8,
     borderRadius: 50,
@@ -132,11 +149,10 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     fontSize: 14,
     color: '#000',
-    flex: 1,
-    textAlign: 'center',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'row',
+    textAlign: 'center', // Centers the text horizontally
+    alignSelf: 'flex-start', // Ensures tags size to fit their content
+    height: '60%',
+    width: '31%'
   },
   tabsContainer: {
     flexDirection: 'row',
@@ -147,22 +163,47 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 16,
     color: '#000',
+    backgroundColor: '#C5D4E5',
+    borderRadius: 8,
   },
   activeTab: {
-    backgroundColor: '#d1cbc7',
+    backgroundColor: '#3F71A8',
     borderRadius: 8,
   },
   arContainer: {
-    backgroundColor: '#e0e0e0',
+    backgroundColor: '#3F71A8',
     padding: 16,
     borderRadius: 10,
-    marginTop: 16,
+    height: '26%'
   },
   arText: {
     fontSize: 16,
     textAlign: 'center',
     color: '#000',
+    backgroundColor: '#FFFFFF',
+    height: '20%'
   },
+  whiteBox: {
+    backgroundColor: '#FFFFFF', // White background
+    padding: 16, // Padding for spacing inside the box
+    borderRadius: 10, // Rounded corners
+    shadowColor: '#000', // Optional: Adds shadow for better visibility
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 5, // Elevation for Android shadow
+    alignItems: 'center', // Centers the text horizontally
+    justifyContent: 'center', // Centers the text vertically
+    height: '100%'
+  },
+  blackText: {
+    fontSize: 16,
+    color: '#000000', // Black text color
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontStyle: "italic"
+  },
+  
 });
 
 export default FoodScreen;

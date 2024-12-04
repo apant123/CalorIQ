@@ -55,14 +55,14 @@ export default function DiningHallScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#d3d3d3',
+    backgroundColor: '#FFFFFF',
     alignItems: 'center',
     paddingTop: 40,
   },
   header: {
     fontSize: 30,
     fontWeight: 'bold',
-    marginTop: '8%',
+    marginTop: '10%',
   },
   hallContainer: {
     marginTop: '10%', // Move the container down
@@ -74,13 +74,13 @@ const styles = StyleSheet.create({
     height: '13%', // Set a fixed height for the button
     flexDirection: 'row', // Align items in a row
     alignItems: 'center', // Center items vertically
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#C5D4E5',
     borderRadius: 10,
-    marginVertical: '3%',
+    marginVertical: '4%',
     paddingHorizontal: 10, // Add horizontal padding
   },
   selectedHallButton: {
-    backgroundColor: '#a9a9a9',
+    backgroundColor: '#F8D446',
   },
   hallText: {
     fontSize: 24,
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
   },
   backButton: {
     position: 'absolute',
-    top: 40,
+    top: 60,
     left: 20,
 },
 });

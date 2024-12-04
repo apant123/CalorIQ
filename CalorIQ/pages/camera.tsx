@@ -3,6 +3,7 @@ import { useState, useRef } from 'react';
 import { Button, StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
 import { Camera } from 'expo-camera';
 import { useNavigation } from '@react-navigation/native';
+import { MaterialIcons } from '@expo/vector-icons';
 
 export default function CameraScreen() {
   const navigation = useNavigation();
@@ -32,9 +33,11 @@ export default function CameraScreen() {
   }
 
   async function takePicture() {
+    console.log("taking picture")
     if (cameraRef.current) {
       const photo = await cameraRef.current.takePictureAsync();
       setPhotoUri(photo.uri);
+      console.log(photo.uri)
     }
   }
 
@@ -64,10 +67,10 @@ export default function CameraScreen() {
         <CameraView style={styles.camera} facing={facing} ref={cameraRef}>
           <View style={styles.buttonContainer}>
             <TouchableOpacity style={styles.button} onPress={toggleCameraFacing}>
-              <Text style={styles.text}>Flip Camera</Text>
+              <MaterialIcons name="flip-camera-android" size={40} color="#F8D446" />
             </TouchableOpacity>
             <TouchableOpacity style={styles.button} onPress={takePicture}>
-              <Text style={styles.text}>Take Picture</Text>
+              <MaterialIcons name="camera-alt" size={40} color="#F8D446" />
             </TouchableOpacity>
           </View>
         </CameraView>
@@ -94,19 +97,17 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 50, // Adjust this to move the buttons up or down as needed
     width: '100%',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent black background
     paddingVertical: 10,
   },
   button: {
     paddingHorizontal: 20,
     paddingVertical: 10,
-    backgroundColor: 'rgba(255, 255, 255, 0.7)', // Semi-transparent white background for visibility
     borderRadius: 5,
   },
   text: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: 'black', // Change to 'white' if needed for contrast
+    color: '#F8D446', // Change to 'white' if needed for contrast
   },
   previewContainer: {
     flex: 1,
